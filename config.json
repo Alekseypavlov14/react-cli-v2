@@ -1,0 +1,5 @@
+{
+  "lang": "ts",
+  "styles": "scss",
+  "default_path": "src/components"
+}
