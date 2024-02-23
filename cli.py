@@ -32,12 +32,12 @@ def init(lang, styles, default_path):
   path = default_path
 
   if (utils.Path.is_absolute(path)):
-    print('Do not use absolute paths (starting with /)')
+    utils.Printer.warning('Do not use absolute paths (starting with /)')
     path = path[1:] # remove first symbol
 
   controllers.init(lang, styles, path)
 
-  print('Configuration is created!')
+  utils.Printer.success('Configuration is created!')
 
 # for creating entity
 @click.command()
@@ -49,15 +49,15 @@ def create(entity, name, path):
   normalized_path = path if path != None else utils.Configuration.get_config().default_path
 
   if (utils.Path.is_absolute(normalized_path)):
-    print('Do not use absolute paths (starting with /)')
+    utils.Printer.warning('Do not use absolute paths (starting with /)')
     normalized_path = normalized_path[1:] # remove first symbol
     return # do not create entity
 
   try:
     controllers.create(normalized_entity, name, normalized_path)
-    print('Successfully created!')
+    utils.Printer.success('Successfully created!')
   except FileExistsError:
-    print('File with this name already exists')
+    utils.Printer.error('File with this name already exists')
 
 
 # load all commands

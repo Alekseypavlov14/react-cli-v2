@@ -1,3 +1,5 @@
+import termcolor
+
 import json
 import constants
 
@@ -83,7 +85,25 @@ def create_basic_file(path: str, name: str, content: str, configuration: Configu
   file_name = name + '.' + configuration.lang
   file_path = Path.join(path, file_name)
 
-  try: os.mkdir(path)
+  try: os.makedirs(path)
   except FileExistsError: pass
 
+  if os.path.exists(file_path):
+    raise FileExistsError()
+
   Files.write_file(file_path, content)
+
+# colorized outputs
+class Printer():
+  @staticmethod
+  def success(text):
+    print(termcolor.colored(text, 'green'))
+
+  @staticmethod
+  def error(text):
+    print(termcolor.colored(text, 'red'))
+
+  @staticmethod
+  def warning(text):
+    print(termcolor.colored(text, 'yellow'))
+
