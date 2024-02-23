@@ -29,7 +29,14 @@ def cli_commands():
   help='Default path where entity will be created (mostly for components)'
 )
 def init(lang, styles, default_path):
-  controllers.init(lang, styles, default_path)
+  path = default_path
+
+  if (utils.Path.is_absolute(path)):
+    print('Do not use absolute paths (starting with /)')
+    path = path[1:] # remove first symbol
+
+  controllers.init(lang, styles, path)
+
   print('Configuration is created!')
 
 # for creating entity
@@ -41,10 +48,17 @@ def create(entity, name, path):
   normalized_entity = constants.entities.normalize_entity(entity)
   normalized_path = path if path != None else utils.Configuration.get_config().default_path
 
+  if (utils.Path.is_absolute(normalized_path)):
+    print('Do not use absolute paths (starting with /)')
+    normalized_path = normalized_path[1:] # remove first symbol
+    return # do not create entity
 
-  controllers.create(normalized_entity, name, normalized_path)
+  try:
+    controllers.create(normalized_entity, name, normalized_path)
+    print('Successfully created!')
+  except FileExistsError:
+    print('File with this name already exists')
 
-  print('Successfully created!')
 
 # load all commands
 cli_commands.add_command(init)

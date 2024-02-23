@@ -13,6 +13,9 @@ class Path():
   
   def join_as_absolute(self, *paths):
     return self.join(os.getcwd(), *paths)
+  
+  def is_absolute(path: str):
+    return os.path.isabs(path) 
 
 
 # create config plain data class
@@ -31,7 +34,15 @@ class Configuration():
 
   def get_config():
     filepath = Configuration.path
-    config = JSON.parse(Files.read_file(filepath))
+    config = {
+      'lang': constants.config_options.default_lang,
+      'styles': constants.config_options.default_styles,
+      'default_path': constants.config_options.default_path,
+    }
+
+    # load config file if existed (otherwise leave default)
+    try: config = JSON.parse(Files.read_file(filepath))
+    except: pass
 
     configuration = Configuration(
       config['lang'] or constants.config_options.default_lang, 
