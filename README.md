@@ -22,6 +22,7 @@ Options:
 
 Arguments:
 - entity - entity that will be created. [component|hook|util|constants|c|h|u|const]
+
 Options:
 - name - entity name (for example, Header or useLocalStorage)
 - path - optional. Sets where to create an entity (for example, src/shared/hooks)
