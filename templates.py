@@ -9,7 +9,7 @@ def component_template(name: str, configuration: utils.Configuration):
     "import React from 'react'",
     "import styles from './<STYLES_FILE_NAME>'",
 
-    "\n interface <COMPONENT>Props {} \n" if configuration.lang == 'ts' else '', 
+    "\ninterface <COMPONENT>Props {}\n" if configuration.lang == 'ts' else '', 
 
     "export function <COMPONENT>({ ...props }: <COMPONENT>Props) {" if configuration.lang == 'ts' 
     else 'export function <COMPONENT>({ ...props }) {',
@@ -27,7 +27,7 @@ def component_template(name: str, configuration: utils.Configuration):
   return file_content
 
 def component_index_template(name: str):
-  file_lines = ['export { <COMPONENT> }']
+  file_lines = ['export { <COMPONENT> } from \'./<COMPONENT>\'']
 
   file_content = utils.concat_strings(file_lines, '\n').replace('<COMPONENT>', name)
 
