@@ -61,7 +61,7 @@ class JSON():
     return json.dumps(data, indent=2)
   
   def parse(str_data: str):
-    return json.load(str_data)
+    return json.loads(str_data)
   
 
 # Files
@@ -71,27 +71,57 @@ class Files():
     file.write(content)
     file.close()
 
-  def read_file(filepath):
-    file_content = open(filepath, 'r')
-    return file_content
+  def read_file(filepath) -> str:
+    with open(filepath, 'r') as file:
+      return file.read()
+  
+  def replace_file_content(filepath: str, content: str, replacer: str):
+    file_content = Files.read_file(filepath)
+    new_file_content = file_content.replace(content, replacer)
+    Files.write_file(filepath, new_file_content)
 
 
 # string utils
 def concat_strings(substr: list[str], joining_str: str):
   return joining_str.join(substr)
 
-# create basic file
-def create_basic_file(path: str, name: str, content: str, configuration: Configuration):
-  file_name = name + '.' + configuration.lang
-  file_path = Path.join(path, file_name)
 
-  try: os.makedirs(path)
-  except FileExistsError: pass
+# basic file utils
+class CodeFiles():
+  def create_basic_file(path: str, name: str, content: str, configuration: Configuration):
+    file_name = CodeFiles.create_basic_file_name(name, configuration)
+    file_path = Path.join(path, file_name)
 
-  if os.path.exists(file_path):
-    raise FileExistsError()
+    try: os.makedirs(path)
+    except FileExistsError: pass
 
-  Files.write_file(file_path, content)
+    if os.path.exists(file_path):
+      raise FileExistsError()
+
+    Files.write_file(file_path, content)
+
+  def rename_basic_file(path: str, name: str, new_name: str, configuration: Configuration):
+    old_file_name = CodeFiles.create_basic_file_name(name, configuration)
+    new_file_name = CodeFiles.create_basic_file_name(new_name, configuration)
+
+    old_file_path = Path.join(path, old_file_name)
+    new_file_path = Path.join(path, new_file_name)
+
+    os.rename(old_file_path, new_file_path)
+
+  def create_basic_file_name(name: str, configuration: Configuration):
+    return name + '.' + configuration.lang
+  
+  def create_component_file_name(name: str, configuration: Configuration):
+    # 'x' needed because components files have extension jsx/tsx
+    return name + '.' + configuration.lang + 'x' 
+
+  def create_styles_file_name(name: str, configuration: Configuration):
+    return name + '.module.' + configuration.styles
+
+  def create_index_file_name(configuration: Configuration):
+    return 'index.' + configuration.lang
+
 
 # colorized outputs
 class Printer():
@@ -106,4 +136,3 @@ class Printer():
   @staticmethod
   def warning(text):
     print(termcolor.colored(text, 'yellow'))
-

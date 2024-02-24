@@ -49,9 +49,8 @@ def create(entity, name, path):
   normalized_path = path if path != None else utils.Configuration.get_config().default_path
 
   if (utils.Path.is_absolute(normalized_path)):
-    utils.Printer.warning('Do not use absolute paths (starting with /)')
-    normalized_path = normalized_path[1:] # remove first symbol
-    return # do not create entity
+    # do not create entity
+    return utils.Printer.warning('Do not use absolute paths (starting with /)')
 
   try:
     controllers.create(normalized_entity, name, normalized_path)
@@ -60,9 +59,37 @@ def create(entity, name, path):
     utils.Printer.error('File with this name already exists')
 
 
+# for renaming entities
+@click.command()
+@click.argument('entity', type=click.Choice(constants.entities.options), default=constants.entities.default_entity)
+@click.argument('name', type=click.STRING, required=1)
+@click.argument('path', type=click.Path(exists=False), default=None, required=1)
+@click.argument('new_name', type=click.STRING, required=1)
+def rename(entity, name, path, new_name):
+  # compare names
+  if name == new_name:
+    # do not rename entity
+    return utils.Printer.warning('NAME and NEW_NAME are equal')
+  
+  # normalizes and validations
+  normalized_entity = constants.entities.normalize_entity(entity)
+  normalized_path = path
+
+  if (utils.Path.is_absolute(normalized_path)):
+    # do not rename entity
+    return utils.Printer.warning('Do not use absolute paths (starting with /)')
+  
+  try:
+    controllers.rename(normalized_entity, name, normalized_path, new_name)
+    utils.Printer.success('Successfully renamed')
+  except FileNotFoundError:
+    utils.Printer.error('This entity is not found')
+
+
 # load all commands
 cli_commands.add_command(init)
 cli_commands.add_command(create)
+cli_commands.add_command(rename)
 
 
 if __name__ == '__main__':

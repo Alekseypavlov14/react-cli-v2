@@ -25,3 +25,12 @@ Arguments:
 Options:
 - name - entity name (for example, Header or useLocalStorage)
 - path - optional. Sets where to create an entity (for example, src/shared/hooks)
+
+### rename \<ENTITY> \<NAME> \<PATH> \<NEW_NAME>
+
+Arguments:
+- entity - entity that will be renamed. [component|hook|util|constants|c|h|u|const]
+Options:
+- name - entity name (for example, Header or useLocalStorage)
+- path - optional. Sets where to rename an entity (for example, src/shared/hooks)
+- new_name - new name for the entity

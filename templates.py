@@ -3,14 +3,13 @@ import utils
 # component files
 def component_template(name: str, configuration: utils.Configuration):
   # styles file name
-  styles_file_name = name + '.module.' + configuration.styles
+  styles_file_name = utils.CodeFiles.create_styles_file_name(name, configuration)
   
   file_lines = [
     "import React from 'react'",
     "import styles from './<STYLES_FILE_NAME>'",
-    "",
 
-    "interface <COMPONENT>Props {}", "" if configuration.lang == 'ts' else '',
+    "\n interface <COMPONENT>Props {} \n" if configuration.lang == 'ts' else '', 
 
     "export function <COMPONENT>({ ...props }: <COMPONENT>Props) {" if configuration.lang == 'ts' 
     else 'export function <COMPONENT>({ ...props }) {',
