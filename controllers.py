@@ -23,7 +23,7 @@ def create_component(name, path):
 
   # get component files content
   component_file = templates.component_template(name, configuration)
-  component_styles_file = templates.component_styles_file(name)
+  component_styles_file = templates.component_styles_file(name, configuration)
   component_index_file = templates.component_index_template(name)
 
   # get file names

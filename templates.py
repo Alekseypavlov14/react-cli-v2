@@ -26,15 +26,18 @@ def component_template(name: str, configuration: utils.Configuration):
 
   return file_content
 
-def component_index_template(name: str):
-  file_lines = ['export { <COMPONENT> } from \'./<COMPONENT>\'']
+def component_styles_file(name: str, configuration: utils.Configuration):
+  file_lines = []
+
+  if configuration.styles == 'css': file_lines = ['/* .<COMPONENT> {} */']
+  elif configuration.styles == 'scss': file_lines = ['// .<COMPONENT> {}']
 
   file_content = utils.concat_strings(file_lines, '\n').replace('<COMPONENT>', name)
 
   return file_content
 
-def component_styles_file(name: str):
-  file_lines = ['/* .<COMPONENT> {} */']
+def component_index_template(name: str):
+  file_lines = ['export { <COMPONENT> } from \'./<COMPONENT>\'']
 
   file_content = utils.concat_strings(file_lines, '\n').replace('<COMPONENT>', name)
 
